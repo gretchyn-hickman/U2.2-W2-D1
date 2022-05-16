@@ -25,17 +25,10 @@ export const listOfAwesome = [
 ];
 
 export default function Programmers() {
-  // We'll have to use the state hook twice, as we need two slices of state.
-  // The programmers list on the one hand, and the id of the featured programmer on the other.
   const [programers, setProgramers] = useState(listOfAwesome);
   const [featured, setFeatured] = useState(null);
 
   const getNameOfFeatured = () => {
-    // Leave this for last!
-    // This is NOT an event handler but a helper function. See its usage inside the JSX.
-    // It's going to utilize both slices of state to return the _name_ of the featured dev.
-    // The beauty of closures is that we can "see" both slices of state from this region
-    // of the program, without needing to inject the information through arguments.
     for (let i = 0; i <programers.length; i++) {
       if (programers[i].id === featured) {
           return programers[i].name;
@@ -53,11 +46,7 @@ export default function Programmers() {
     <div className='widget-programmers container'>
       <h2>Programmers</h2>
       <div className='programmers'>
-        {
-          /* Nasty bug! We should map over a slice of state, instead of 'listOfAwesome'.
-          We might think: "it works, though!" But if the list of programmers is not state,
-          we could never add or edit programmers in the future. The list would be a static thing." */
-          programers.map(dev =>
+        { programers.map(dev =>
             <div className='programmer' key={dev.id}>
               {dev.name} <button onClick={() => {setFeatured(dev.id)}}>Feature</button>
             </div>
@@ -65,11 +54,7 @@ export default function Programmers() {
         }
       </div>
       <div id='featured' style={style}>
-        {
-          // Ternaries are fantastic to render "one thing or the other" depending on the "truthiness" of something.
-          // Pseudo-code: if the currently featured id is truthy render text 1, otherwise render text 2.
-          // Replace the hard-coded false with the correct variable.
-          featured
+        { featured
             ? `🎉 Let's celebrate ${getNameOfFeatured()}! 🥳`
             : 'Pick an awesome programmer'
         }
